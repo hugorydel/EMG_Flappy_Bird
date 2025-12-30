@@ -83,3 +83,51 @@ export interface RecordState {
 	history: AppState[];
 	isRecording: boolean;
 }
+
+// Utility types
+export interface CollisionRange {
+	from: number;
+	to: number;
+}
+
+export type RenderFunction = (state?: AppState) => void;
+
+// Store types
+export interface Store {
+	getState: () => AppState;
+	actions: Actions;
+	subscribe: (callback: SubscribeCallback) => void;
+}
+
+export interface SubscribeData {
+	actionType: string;
+	currentState: AppState;
+}
+
+export type SubscribeCallback = (data: SubscribeData) => void;
+
+// Record module interface
+export interface RecordModule {
+	getRecord: () => RecordState;
+	start: () => void;
+	setRender: (renderFunction: RenderFunction) => void;
+	finish: () => void;
+	save: (state: AppState) => void;
+	replay: () => void;
+	reverse: () => void;
+}
+
+// Add to types.ts
+export interface EMGSignal {
+	timestamp: number;
+	amplitude: number;
+	threshold: number;
+}
+
+export interface EMGConfig {
+	threshold: number;
+	debounceMs: number;
+	samplingRate: number;
+}
+
+export type EMGHandler = (signal: EMGSignal) => void;
