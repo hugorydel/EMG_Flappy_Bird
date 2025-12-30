@@ -1,6 +1,5 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Fastclick from 'fastclick';
 import App from './App';
 import createStore from './store';
 import initialState from './initialState';
@@ -54,7 +53,7 @@ let requestID: number | null = null;
 
 function playing(): void {
 	requestID = requestAnimationFrame(playing);
-	PLAYING();
+	PLAYING(store.getState()); // FIX: Pass state to PLAYING
 }
 
 function stopPlaying(): void {
@@ -64,7 +63,3 @@ function stopPlaying(): void {
 }
 
 renderToDOM();
-
-if ('ontouchstart' in document) {
-	Fastclick.attach(document.body);
-}

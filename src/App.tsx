@@ -11,14 +11,17 @@ interface AppProps {
 	record: RecordModule;
 }
 
-export default function App({ state, actions, record }: AppProps): JSX.Element {
+export default function App({ state, actions, record }: AppProps): React.JSX.Element {
 	const { bird, pipings, game, player } = state;
 	const { FLY_UP, START_PLAY } = actions;
 	const recordState = record.getRecord();
 	const { isRecording, history } = recordState;
 	const isPlaying = game.status === 'playing';
-	const onFlyUp = isPlaying && !isRecording ? FLY_UP : undefined;
+
+	const handleFlyUp = isPlaying && !isRecording ? () => FLY_UP(state) : undefined;
+	const handlePlay = () => START_PLAY(state);
 	const onReplay = history.length > 0 ? record.replay : undefined;
+
 	const landClasses = classnames({
 		land: true,
 		sliding: isPlaying,
@@ -26,7 +29,7 @@ export default function App({ state, actions, record }: AppProps): JSX.Element {
 
 	return (
 		<div className='game'>
-			<div className='scene' onMouseDown={onFlyUp} onTouchStart={onFlyUp}>
+			<div className='scene' onMouseDown={handleFlyUp} onTouchStart={handleFlyUp}>
 				{isPlaying && <div className='score'>{player.score}</div>}
 				<Bird {...bird} isFlying={isPlaying} />
 				{pipings.list.map(piping => (
@@ -36,7 +39,7 @@ export default function App({ state, actions, record }: AppProps): JSX.Element {
 				{game.status === 'over' && (
 					<Menu
 						score={player.score}
-						onPlay={START_PLAY}
+						onPlay={handlePlay}
 						onReplay={onReplay}
 						onReverse={record.reverse}
 					/>

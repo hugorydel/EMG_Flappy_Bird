@@ -6,7 +6,7 @@ import {
 	GameState,
 	Piping,
 	CollisionRange,
-} from '../types';
+} from './types';
 
 /**
  * actions
